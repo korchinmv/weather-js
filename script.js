@@ -14,38 +14,41 @@ const card = {
   image: ".weather-card__img",
 };
 
-const getApiResponse = (url, formInput) => {
-  return fetch(`${url}${formInput.value.trim()}`)
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally();
-};
-
 const renderCardInfo = (
   { card, city, country, temperature, cloud, image },
   data
 ) => {
-  console.log(data);
   const cardWeather = document.querySelector(card);
   const cityCard = cardWeather.querySelector(city);
   const countryCard = cardWeather.querySelector(country);
-  const tempCard = cardWeather.querySelector(temperature);
+  const temperatureCard = cardWeather.querySelector(temperature);
   const cloudCard = cardWeather.querySelector(cloud);
   const imageCard = cardWeather.querySelector(image);
 
-  // cityCard.textContent = data.
+  cityCard.textContent = data.location.name;
+  countryCard.textContent = data.location.country;
+  temperatureCard.textContent = `${data.current.temp_c}°`;
 };
+
+const addCardInSection = () => {};
+
+async function getApiResponse(url, formInput) {
+  try {
+    const response = await fetch(`${url}${formInput.value.trim()}`);
+    const data = await response.json();
+
+    if (data.error) {
+      console.log(dada.error.message);
+    }
+
+    renderCardInfo(card, data);
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  renderCardInfo(card, getApiResponse(URL, formInput));
+  getApiResponse(URL, formInput);
 });
